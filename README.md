@@ -23,9 +23,44 @@ Each neuron applies an **activation function** (Sigmoid or ReLU), and training i
    - Load and plot 28×28 pixel intensity maps from MNIST `.csv` files.
    - Observe different digits visually before training.
 
-2. **Implement Neural Network in MATLAB**
-   - Use the class-based structure (`.m` file) as provided in the CBEM template.
-   - Define weights, activation functions (sigmoid or ReLU), and forward pass logic.
+2. **Implement Neural Network in MATLAB (based on the template)**
+
+Use the provided class template `neuralNetwork.m` to define a 3-layer feedforward neural network.
+
+#### 🧱 Class Structure
+
+```matlab
+classdef neuralNetwork
+    properties
+        inodes; % input nodes
+        hnodes; % hidden nodes
+        onodes; % output nodes
+        lr;     % learning rate
+        w_ih;   % weights from input to hidden
+        w_ho;   % weights from hidden to output
+    end
+
+    methods
+        function self = neuralNetwork(inputnodes, hiddennodes, outputnodes, learningrate)
+            % Constructor: initializes node counts and random weights
+        end
+
+        function final_outputs = query(self, inputs)
+            % Forward pass: input → hidden → output (inference/prediction)
+        end
+
+        function self = train(self, inputs, targets)
+            % Backpropagation training using gradients
+        end
+    end
+
+    methods(Static)
+        function out = actfun(x)
+            % Activation function (sigmoid or ReLU)
+        end
+    end
+end
+
 
 3. **Train the Network**
    - Use the large MNIST training dataset.
