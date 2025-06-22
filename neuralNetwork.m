@@ -15,6 +15,7 @@ classdef neuralNetwork
         function self = neuralNetwork(inputnodes, hiddennodes, outputnodes, learningrate)
             % neuralNetwork: Construct an instance of this class
             % Your code goes here. 
+            
         end
             
         % Query the neural network. The function takes a vector of inputs
