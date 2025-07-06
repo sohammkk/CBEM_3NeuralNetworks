@@ -1,7 +1,9 @@
 clear;
 clc;
 error_sum=0;
-correct=0;
+corr_count=zeros(1,10);
+total=zeros(1,10);
+percentage=zeros(1,10);
 %loading trained model
 load("Trained_models\trainedNetwork.mat");
 %network_test = neuralNetwork(784,100,10,0.5);
@@ -15,14 +17,25 @@ l=size(data,1);
 for i = 1:l
     inputs = ((data(i,2:end) / 255.0)*0.99+0.01)';
     n=data(i,1);
+    total(n+1)=1+total(n+1);
     target = ones(10,1) ./ 100;
     target(n+1,1)=0.99;
     [err,corr]=network1.test(inputs,target);
     error_sum = error_sum + err;
-    correct=correct + corr;
+    if corr==1
+        corr_count(n+1)=1+corr_count(n+1);
+    end
 end
 
 
-fprintf("Correctness of our Neural Network: %.2f%% \n",(correct/l)*100);
+%printing accuracy
+plot((0:9),corr_count);
+
+for i=1:10
+    percentage(i)=(corr_count(i)/total(i))*100;
+    fprintf("Digit: %d Accuracy: %.2f\n",i-1, percentage(i));
+end
+
+fprintf("Correctness of our Neural Network: %.2f%% \n",(sum(corr_count)/l)*100);
 fprintf("Mean Error deviation: %.2f\n", error_sum/l);
 disp('End');
