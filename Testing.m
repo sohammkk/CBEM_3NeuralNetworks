@@ -20,22 +20,22 @@ for i = 1:l
     total(n+1)=1+total(n+1);
     target = ones(10,1) ./ 100;
     target(n+1,1)=0.99;
-    [err,corr]=network1.test(inputs,target);
-    error_sum = error_sum + err;
+    corr=network1.test(inputs,target);
+
     if corr==1
         corr_count(n+1)=1+corr_count(n+1);
     end
 end
 
 
-%printing accuracy
-plot((0:9),corr_count);
 
 for i=1:10
     percentage(i)=(corr_count(i)/total(i))*100;
     fprintf("Digit: %d Accuracy: %.2f\n",i-1, percentage(i));
 end
+%printing accuracy
+plot((0:9),percentage);
 
-fprintf("Correctness of our Neural Network: %.2f%% \n",(sum(corr_count)/l)*100);
-fprintf("Mean Error deviation: %.2f\n", error_sum/l);
+
+fprintf("Accuracy of our Neural Network: %.2f%% \n",(sum(corr_count)/l)*100);
 disp('End');

@@ -9,11 +9,6 @@ classdef neuralNetwork
         lr;     % learning rate
         w_ih;   % link weights between input layer and hidden layer
         w_ho;   % link weights between hidden layer and output layer
-        %extra
-        b_ih;
-        b_ho;
-        lr_decay=0.85;
-        %extra
     end
 
     methods
@@ -22,23 +17,22 @@ classdef neuralNetwork
             self.hnodes=hiddennodes;
             self.onodes=outputnodes;
             self.lr=learningrate;
+            %Xavier initialization
             self.w_ih=randn(self.hnodes,self.inodes)/ sqrt(self.inodes);
             self.w_ho=randn(self.onodes,self.hnodes)/ sqrt(self.hnodes);
-           %extra
-           self.b_ih=zeros(self.hnodes,1);
-           self.b_ho=zeros(self.onodes,1);
-           %extra
+            
+            %self.w_ih=zeros(self.hnodes,self.inodes) *0.5;            
+            %only guessing 0 when weights=0.5 and 1 when weights=0 (same guess with same weights)
+            %self.w_ho=zeros(self.onodes,self.hnodes) *0.5;
         end
             
         % Query the neural network. The function takes a vector of inputs
         % and computes the outputs, i.e. a "prediction".
         function [final_outputs,hidden_output] = query(self, inputs)
-            hidden_output=self.w_ih * (inputs) + self.b_ih; %extra
+            hidden_output=self.w_ih * (inputs);
             hidden_output = self.actfun(hidden_output);
-            final_outputs = self.w_ho * hidden_output + self.b_ho;%extra
+            final_outputs = self.w_ho * hidden_output;
             final_outputs = self.actfun(final_outputs);
-            
-            
         end
 
         % Train the neural network. This function learns the link weights
@@ -53,18 +47,11 @@ classdef neuralNetwork
            
            self.w_ho=self.w_ho + (self.lr*(output_error .* final .* (1-final))) * hidden';
            self.w_ih= self.w_ih + (self.lr*(hidden_error .* hidden .* (1-hidden))) * inputs';
-           self.b_ih= self.b_ih + (self.lr*(hidden_error .* hidden .* (1-hidden))); %extra
-           self.b_ho= self.b_ho + (self.lr*(output_error .* final .* (1-final))); %extra
-           self.lr = self.lr * self.lr_decay; %extra
-           
         end
 
         %testing function
-        function [error,correctness] = test(self, inputs, target)
+        function correctness = test(self, inputs, target)
             [final,~]=self.query(inputs);
-            %deviation
-            error=target-final;
-            error=mean(error);
             %guess correctness
             [~,target_number]=max(target);
             [~,guessed_number]=max(final);
